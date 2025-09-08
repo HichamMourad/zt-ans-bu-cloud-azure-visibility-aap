@@ -1,40 +1,4 @@
 
-In this challenge, you'll perform automation against your Microsoft Azure public cloud environment.
-You will also learn how to create a `Job Template` in Automation controller.
-+
-You will launch a number of job templates to perform the following:
-
- ** Retrieve information about regions (https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/#overview[also referred to as geographies or locations])
- ** Retrieve information about Virtual Networks
- ** Retrieve information about Virtual Machines
-
-* type: text contents: |-   # Infrastructure visibility
-+
-Cloud automation begins and ends with structured data.
-Ansible can help retrieve information from your public cloud to help you understand your cloud footprint.
-+
-image::https://github.com/IPvSean/pictures_for_github/blob/master/visbility.png?raw=true[]
-
-* type: text contents: |+   # Understanding Job Templates
-+
-A job template is a definition and set of parameters for running an Ansible job.
-Job templates are useful to execute the same job many times.
-Job templates also encourage the reuse of Ansible playbook content and collaboration between teams.
-+
-image::https://github.com/IPvSean/pictures_for_github/blob/master/job_template.png?raw=true[]
-
-* type: text contents: |-   # Lets get started
-+
-That is the end of of your challenge briefing!
-+
-Once the lab is setup you can click the Green start button image:https://github.com/IPvSean/pictures_for_github/blob/master/start_button.png?raw=true[,100px] in the bottom right corner of this window.
-tabs:
-
-* id: ti8p7ukhiivm title: Ansible Automation Controller type: service hostname: controller path: / port: 443
-* id: 1pnagcbh0n1b title: Azure Portal type: website url: https://portal.azure.com/#home new_window: true
-* id: dxrncfttfsdu title: Azure Portal Account type: service hostname: azurecloudclient port: 80 difficulty: basic timelimit: 900 enhanced_loading: null -- 👋 Introduction ===
-+
-==== Estimated time to complete: _5 minutes_<p>
 +
 Welcome to the second challenge.
 For this challenge we will learn how to retrieve public cloud information with a job template.
