@@ -1,154 +1,201 @@
- -- 👋 Introduction ===
-+
-==== Estimated time to complete: _5 minutes_<p>
-+
-Welcome to the second challenge.
-For this challenge we will learn how to retrieve public cloud information with a job template.
+= Lab Guide: Retrieving Azure Cloud Information
+:doctype: book
+:notoc:
+:toc-title: Table of Contents
+:sectnums:
+:icons: font
 
-Login to Automation controller with the following credentials
+_A guide to performing automation against Microsoft Azure to retrieve information about regions, virtual networks, and virtual machines._
 
-[cols=2*]
+---
+
+== Lab Briefing
+
+This section provides an overview of the lab challenge and instructions for getting started.
+
+=== Challenge Summary
+
+In this challenge, you'll perform automation against your Microsoft Azure public cloud environment. You will create a **Job Template** in the automation controller and launch it to perform the following actions:
+
+* Retrieve information about Azure link:https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/#overview[regions].
+* Retrieve information about Virtual Networks.
+* Retrieve information about Virtual Machines.
+
+=== Infrastructure Visibility
+
+Cloud automation begins and ends with structured data. Ansible can help retrieve information from your public cloud to help you understand your cloud footprint and make informed decisions.
+
+image::https://github.com/IPvSean/pictures_for_github/blob/master/visbility.png?raw=true[Diagram of infrastructure visibility, opts="border"]
+
+=== Understanding Job Templates
+
+A **job template** is a definition and set of parameters for running an Ansible job. Job templates are useful for executing the same job many times and they encourage the reuse of Ansible playbook content and collaboration between teams.
+
+image::https://github.com/IPvSean/pictures_for_github/blob/master/job_template.png?raw=true[Example of a job template, opts="border"]
+
+=== Getting Started
+
+That is the end of your challenge briefing! Please click the green **Start** button in the bottom right corner of this window if the lab has not already started.
+
+image:https://github.com/IPvSean/pictures_for_github/blob/master/start_button.png?raw=true[Start Button, 100, opts="border"]
+
+---
+
+== Lab Guide: Hands-On Tasks
+
+*Estimated time to complete: 10 minutes*
+
+Welcome to the second challenge. You will now learn how to retrieve public cloud information with a job template.
+
+First, log in to the automation controller with the following credentials.
+
+.Login Credentials
+[cols="1,2a"]
 |===
-| username:
-| `admin`
-
-| password:
-| `ansible123!`
+| Username | `admin`
+| Password | `ansible123!`
 |===
 
-= ☑️ Task 1 - Create a Job Template
+=== Task 1: Create the "Retrieve region info" Job Template
 
-To create a *Job Template* we need three main components:
+To create a Job Template, you need three main components: an **inventory**, a **credential**, and a **project**.
 
-. An *inventory* to run the automation against
-. A *credential* to access the API
-. A *project* to sync playbooks from.
+. **Navigate to the Templates page.**
++
+In the left navigation menu, go to **Resources** → **Templates**.
++
+image::https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true[Templates link in navigation menu, 150, opts="border"]
 
-Click the *Templates* link in the left navigation menu underneath the Resources tab.
+. **Create a new job template.**
++
+**Click** the blue **Add** button and select **Add job template**.
++
+image:https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true[Add job template button, 200, opts="border"]
 
-image::https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true[,150]
+. **Enter the job template details.**
++
+Fill out the form with the following information:
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Name | `Retrieve region info`
+| Job Type | `Run`
+| Inventory | `Azure Inventory`
+| Project | `Cloud Visibility Project`
+| Execution Environment | `Microsoft Azure Execution Environment`
+| Playbook | `playbooks/retrieve_regions.yml`
+| Credentials | `azure_credential`
+|===
++
+TIP: To find the `azure_credential`, you may need to filter the *Credential Type* to `Microsoft Azure Resource Manager`.
 
-* Now click on `Add` then scroll down and click  `Add job template`
+. **Save the job template.**
++
+**Click** the blue **Save** button.
 
-image:https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true[,200] + Fill out the following fields:
+NOTE: The Ansible Playbooks for this lab are sourced from this link:https://github.com/ansible-cloud/azure_visibility[project on GitHub].
 
-'''+++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
-+++<tr>++++++<td>+++Name+++</td>++++++<td>+++Retrieve region info+++</td>+++
-+++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
-+++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
-+++<tr>++++++<td>+++Project+++</td>++++++<td>+++Cloud Visibility Project+++</td>+++
-+++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Microsoft Azure Execution Environment+++</td>+++
-+++<tr>++++++<td>+++Playbook+++</td>++++++<td>++++++<code>+++playbooks/retrieve_regions.yml+++</code>++++++</td>+++
-+++<tr>++++++<td>+++Credentials+++</td>++++++<td>++++++<code>+++azure_credential+++</code>++++++</td>+++
-</table>
-+++<hr>++++++</hr>+++
+=== Task 2: Launch the Job Template
 
-* If you have trouble finding the `azure_credential` make sure you are looking under the Credential Type `Microsoft Azure Resource Manager`
+Now you are ready to run the job and view the retrieved data.
 
-Click the blue **Save** button.
+. **Launch the job template.**
++
+From the **Templates** page, find the `Retrieve region info` template and **click** the **Launch** icon (🚀).
++
+image:https://github.com/IPvSean/pictures_for_github/blob/master/launch_job.png?raw=true[Launch Job Icon, 80, opts="border"]
 
+. **Review the job output.**
++
+This playbook runs two tasks. The first, `azure.azcollection.azure_rm_resource_info`, retrieves structured data. The second, `ansible.builtin.debug`, prints it to the job output.
++
+**Click** on the `print var all_regions` task, then select the **JSON** tab to see the structured data for all available Azure regions.
++
+image::../assets/json_data.png[JSON data output in the job view, opts="border"]
 
-The project we are loading Ansible Playbooks from can be found here +++<a target="_new" href="https://github.com/ansible-cloud/azure_visibility">+++on GitHub+++</a>+++
+=== Task 3: Create More Job Templates
 
+Next, create two more job templates to retrieve information about virtual networks and virtual machines.
 
-☑️ Task 2 - Launch the Job Template
-===
+. **Create the "Retrieve virtual networks info" template.**
++
+image:https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true[Add job template button, 200, opts="border"]
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Name | `Retrieve virtual networks info`
+| Playbook | `playbooks/retrieve_networks.yml`
+|===
++
+NOTE: Use the same Inventory, Project, Execution Environment, and Credentials as the first template. **Save** the template.
 
-Click the **Templates** link in the left navigation menu underneath the Resources tab.  You will see your `Retrieve Region Info` job template.
+. **Create the "Retrieve virtual machines info" template.**
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Name | `Retrieve virtual machines info`
+| Playbook | `playbooks/retrieve_vms.yml`
+|===
++
+NOTE: Use the same Inventory, Project, Execution Environment, and Credentials as the first template. **Save** the template.
 
-Click the rocket symbol to `Launch Template`.
-+++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/launch_job.png?raw=true" style="width:80px;margin-left:0px">++++++</img>+++
+. **Run the new templates.**
++
+**Launch** both new job templates and examine their output. You will see that the `Retrieve virtual machines info` job retrieves two virtual machines: `RHEL-ansible` and `WIN-ansible`.
 
-This playbook has two tasks. The first task `azure.azcollection.azure_rm_resource_info` will retrieve structured data for locations.  The 2nd task will use the `ansible.builtin.debug` module to print this out to the terminal which we can see in the automation controller job window.
+=== Task 4: Create a Survey to Filter VMs
 
-Click on the `print var all_regions` task output then click on the `JSON` tab.  You will see the structured data retrieve for all available regions on the Microsoft Azure account.  We have pre-configured one (1) region `useast` with a virtual network and two virtual machines.
+To make the `Retrieve virtual machines info` template more flexible, you will add a survey to filter the results by tags.
 
-![json_data.png](../assets/json_data.png)
+. **Navigate to the Survey tab for the template.**
++
+Go to the **Templates** page, **click** on the name `Retrieve virtual machines info`, and then **click** the **Survey** tab.
++
+image:https://github.com/IPvSean/pictures_for_github/blob/master/survey_tab.png?raw=true[Survey tab, 400, opts="border"]
 
-This structured data can be used in our future challenge to create dynamic documentation.
+. **Create a new survey question.**
++
+**Click** the blue **Add** button.
++
+image:https://github.com/IPvSean/pictures_for_github/blob/master/survey_add.png?raw=true[Add survey button, 100, opts="border"]
++
+Fill out the form with the following values:
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Question | `What tag do you want to filter on?`
+| Answer variable name | `your_tags`
+| Answer type | `Text`
+| Required | Check the box ☑️
+| Default answer | `demo:true`
+|===
++
+**Click** the blue **Save** button.
 
+. **Enable and launch the survey.**
++
+**Enable** the survey by clicking the toggle switch at the top of the page.
++
+image:https://github.com/IPvSean/pictures_for_github/blob/master/survey_enabled.png?raw=true[Survey enabled toggle, 200, opts="border"]
++
+Now, **launch** the `Retrieve virtual machines info` job template again. This time, you will see a survey prompt.
 
-☑️ Task 3 - Create more job templates
-===
+. **Use the survey to filter results.**
++
+Surveys allow you to abstract complexity by setting playbook variables with user-friendly questions.
++
+TIP: Try using `os:windows` to retrieve only the Windows virtual machine, or `os:linux` to retrieve only the RHEL machine. This is extremely useful for managing hundreds of virtual machines.
 
-There is two more job templates similar to the `Retrieve Region Info`  we can create.  One for virtual networks and one for virtual machines.
+---
 
-Create the following two job templates:
+== Next Steps
 
-+++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true" style="width:200px;margin-left:0px">++++++</img>++++++<br>++++++</br>+++
-Fill out the following fields:
-+++<hr>++++++</hr>+++
-+++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
-+++<tr>++++++<td>+++Name+++</td>++++++<td>+++Retrieve virtual networks info+++</td>+++
-+++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
-+++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
-+++<tr>++++++<td>+++Project+++</td>++++++<td>+++Cloud Visibility Project+++</td>+++
-+++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Microsoft Azure Execution Environment+++</td>+++
-+++<tr>++++++<td>+++Playbook+++</td>++++++<td>++++++<code>+++playbooks/retrieve_networks.yml+++</code>++++++</td>+++
-+++<tr>++++++<td>+++Credentials+++</td>++++++<td>++++++<code>+++azure_credential+++</code>++++++</td>+++
-</table>
-+++<hr>++++++</hr>+++
+Press the `Check` button below to proceed to the next challenge.
 
-+++<hr>++++++</hr>+++
+== Troubleshooting
 
-+++<table>++++++<tr>++++++<td>+++Name+++</td>++++++<td>++++++<b>+++Retrieve virtual machines info+++</b>++++++</td>+++
-+++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
-+++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
-+++<tr>++++++<td>+++Project+++</td>++++++<td>+++Cloud Visibility Project+++</td>+++
-+++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Microsoft Azure Execution Environment+++</td>+++
-+++<tr>++++++<td>+++Playbook+++</td>++++++<td>++++++<code>+++playbooks/retrieve_vms.yml+++</code>++++++</td>+++
-+++<tr>++++++<td>+++Credentials+++</td>++++++<td>++++++<code>+++azure_credential+++</code>++++++</td>+++
-</table>
-
-Run these two job templates and examine the output.  You will see that under the `Retrieve Virtual Machines Info` Job Template that you will retrieve two virtual machines, `RHEL-ansible` and `WIN-ansible`.
-
-☑️ Task 4 - Create a Survey
-===
-
-Click the **Templates** link in the left navigation menu underneath the Resources tab.  You will see your `Retrieve Virtual Machines Info` job template.
-
-+++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true" style="width:200px;margin-left:0px">++++++</img>+++
-
-* Click the `Retrieve Virtual Machines Info` link to open the job template.
-* Now, click the `Survey` tab at the top of the job template.
-
-+++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/survey_tab.png?raw=true" style="width:400px;margin-left:0px">++++++</img>+++
-
-* Click the blue `Add` button.
-
-+++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/survey_add.png?raw=true" style="width:100px;margin-left:0px">++++++</img>+++
-
-Fill out the following values:
-+++<hr>++++++</hr>+++
-
-+++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
-+++<tr>++++++<td>+++Question+++</td>++++++<td>+++What tag do you want to filter on?+++</td>++++++<tr>++++++<tr>++++++<td>+++Answer variable name+++</td>++++++<td>++++++<code>+++your_tags+++</code>++++++</td>++++++<tr>++++++<tr>++++++<td>+++Answer type+++</td>++++++<td>+++text+++</td>++++++<tr>++++++<tr>++++++<td>+++Required+++</td>++++++<td>+++☑️+++</td>++++++<tr>++++++<tr>++++++<td>+++Default answer+++</td>++++++<td>++++++<code>+++demo:true+++</code>++++++</td>++++++</tr>+++
-</table>
-
-Click the blue **Save** button.
-
-+++<hr>++++++</hr>+++
-
-Make sure to click the toggle button to enabled the survey.
-
-+++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/survey_enabled.png?raw=true" style="width:200px;margin-left:0px">++++++</img>+++
-
-Either click the `Details` tab or click the **Templates** link in the left navigation menu underneath the Resources tab.  You will see your `Retrieve Virtual Machines Info` job template again.  Launch the job again.
-
-+++<hr>++++++</hr>+++
-
-This time you will see a survey prompt!
-
-Surveys set extra variables for the playbook in a user-friendly question and answer way.  This allows you to abstract complexity using question and answer format.
-
-Try using `os:windows` to only retrieve the Windows virtual machine or `os:linux` to retrieve the Red Hat Enterprise Linux machine.  This may seem super simple for two virtual machines, but when there are hundreds of virtual machines running, it is necessary to filter by tags to help manage, and automate different machines.
-
-
-✅ Next Challenge
-===
-Press the `Check` button below to go to the next challenge once you've completed the task.
-
-🐛 Encountered an issue?
-====
-
-If you have encountered an issue or have noticed something not quite right, please [open an issue](https://github.com/ansible/instruqt/issues/new?title=Issue+with+Ansible+Hybrid+Cloud+Automation+-+Infrastructure+visibility&assignees=ipvsean).+++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>+++
+If you have encountered an issue or have noticed something not quite right, please link:https://github.com/ansible/instruqt/issues/new?title=Issue+with+Ansible+Hybrid+Cloud+Automation+-+Infrastructure+visibility&assignees=ipvsean[open an issue on GitHub].
