@@ -1,7 +1,4 @@
-title: Retrieve Azure cloud information notes:
 
-* type: text contents: |-   # Challenge summary
-+
 In this challenge, you'll perform automation against your Microsoft Azure public cloud environment.
 You will also learn how to create a `Job Template` in Automation controller.
 +
