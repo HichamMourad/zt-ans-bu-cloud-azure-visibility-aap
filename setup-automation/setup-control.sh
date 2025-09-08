@@ -42,7 +42,7 @@ tee /tmp/setup.yml << EOF
   tasks:
 
     - name: Add azure credential to automation controller
-      ansible.controller.credential:
+      awx.awx.credential:
         name: azure_credential
         description: Azure Instruqt Credential
         organization: "Default"
@@ -53,64 +53,27 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
         credential_type: Microsoft Azure Resource Manager
         inputs:
-          subscription: "{{ azure_subscription }}"
-          secret: "{{ azure_password }}"
-          client: "{{ azure_client_id }}"
-          tenant: "{{ azure_tenant }}"
-          # username: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_USERNAME') }}"
-          # password: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_PASSWORD') }}"
-      register: controller_try
-      retries: 5
-      until: controller_try is not failed
-
-    - name: Add RHEL on Azure credential to automation controller
-      ansible.controller.credential:
-        name: "RHEL on Azure"
-        description: "Machine Credential for Azure RHEL instances"
-        organization: "Default"
-        state: present
-        controller_username: "{{ username }}"
-        controller_password: "{{ admin_password }}"
-        controller_host: "https://{{ ansible_host }}"
-        validate_certs: false
-        credential_type: Machine
-        inputs:
-          username: "rheluser"
-          password: "RedHatAnsible123!"
-      register: controller_try
-      retries: 5
-      until: controller_try is not failed
-
-    - name: Add Windows on Azure credential to automation controller
-      ansible.controller.credential:
-        name: "Windows on Azure"
-        description: "Machine Credential for Azure Windows instances"
-        organization: "Default"
-        state: present
-        controller_username: "{{ username }}"
-        controller_password: "{{ admin_password }}"
-        controller_host: "https://{{ ansible_host }}"
-        validate_certs: false
-        credential_type: Machine
-        inputs:
-          username: "azureuser"
-          password: "RedHatAnsible123!"
+          subscription: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SUBSCRIPTION_ID') }}"
+          tenant: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_TENANT_ID') }}"
+          username: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_USERNAME') }}"
+          password: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_PASSWORD') }}"
+          client: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_ID') }}"
+          secret: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_PASSWORD') }}"
       register: controller_try
       retries: 5
       until: controller_try is not failed
 
     - name: Add EE to the controller instance
-      ansible.controller.execution_environment:
+      awx.awx.execution_environment:
         name: "Microsoft Azure Execution Environment"
         image: quay.io/aoc/ee-aap-azure-sre
-        # image: quay.io/acme_corp/azure_ee
         controller_username: "{{ username }}"
         controller_password: "{{ admin_password }}"
         controller_host: "https://{{ ansible_host }}"
         validate_certs: false
 
-    - name: Add Azure Demos Project project
-      ansible.controller.project:
+    - name: Add project
+      awx.awx.project:
         name: "Azure Demos Project"
         description: "This is from github.com/ansible-cloud"
         organization: "Default"
@@ -122,29 +85,9 @@ tee /tmp/setup.yml << EOF
         controller_password: "{{ admin_password }}"
         controller_host: "https://{{ ansible_host }}"
         validate_certs: false
-      register: controller_try
-      retries: 5
-      until: controller_try is not failed
-
-    - name: Add Product Demos project
-      ansible.controller.project:
-        name: "Product Demos Project"
-        description: "This is from github.com/ansible/product-demos"
-        organization: "Default"
-        state: present
-        scm_type: git
-        scm_url: https://github.com/ansible/product-demos
-        default_environment: "Default execution environment"
-        controller_username: "{{ username }}"
-        controller_password: "{{ admin_password }}"
-        controller_host: "https://{{ ansible_host }}"
-        validate_certs: false
-      register: controller_try
-      retries: 5
-      until: controller_try is not failed
 
     - name: Add project
-      ansible.controller.project:
+      awx.awx.project:
         name: "Cloud Visibility Project"
         description: "This is from github.com/ansible-cloud"
         organization: "Default"
@@ -156,12 +99,9 @@ tee /tmp/setup.yml << EOF
         controller_password: "{{ admin_password }}"
         controller_host: "https://{{ ansible_host }}"
         validate_certs: false
-      register: controller_try
-      retries: 5
-      until: controller_try is not failed
 
     - name: Delete native job template
-      ansible.controller.job_template:
+      awx.awx.job_template:
         name: "Demo Job Template"
         state: "absent"
         controller_username: "{{ username }}"
@@ -170,7 +110,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Add ansible-1 host
-      ansible.controller.host:
+      awx.awx.host:
         name: "ansible-1"
         inventory: "Demo Inventory"
         state: present
@@ -185,7 +125,7 @@ tee /tmp/setup.yml << EOF
           ansible_host: "{{ thisaaphostfqdn }}"
 
     - name: Create job template
-      ansible.controller.job_template:
+      awx.awx.job_template:
         name: "{{ item.name }}"
         job_type: "run"
         organization: "Default"
@@ -219,7 +159,7 @@ tee /tmp/setup.yml << EOF
         - { playbook: 'create_windows_vm_demo.yml', name: 'Create Windows Server 2022 VM' }
 
     - name: Create job template
-      ansible.controller.job_template:
+      awx.awx.job_template:
         name: "{{ item.name }}"
         job_type: "run"
         organization: "Default"
@@ -237,7 +177,7 @@ tee /tmp/setup.yml << EOF
         - { playbook: 'create_rhel_vm_demo.yml', name: 'Create RHEL VM' }
 
     - name: Create job template
-      ansible.controller.job_template:
+      awx.awx.job_template:
         name: "Cloud Report"
         job_type: "run"
         organization: "Default"
@@ -253,7 +193,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Launch VMs into Azure
-      ansible.controller.job_launch:
+      awx.awx.job_launch:
         job_template: "Create Windows Server 2022 VM"
         controller_username: "{{ username }}"
         controller_password: "{{ admin_password }}"
@@ -262,7 +202,7 @@ tee /tmp/setup.yml << EOF
       register: job_output
 
     - name: Wait for job
-      ansible.controller.job_wait:
+      awx.awx.job_wait:
         job_id: "{{ job_output.id }}"
         timeout: 3600
         controller_username: "{{ username }}"
@@ -271,56 +211,15 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Launch VMs into Azure
-      ansible.controller.job_launch:
+      awx.awx.job_launch:
         job_template: "Create RHEL VM"
         controller_username: "{{ username }}"
         controller_password: "{{ admin_password }}"
         controller_host: "https://{{ ansible_host }}"
         validate_certs: false
 
-    - name: Add an Azure Inventory
-      ansible.controller.inventory:
-        name: "Azure Inventory"
-        description: "Our Azure Inventory"
-        organization: "Default"
-        state: present
-        controller_username: "{{ username }}"
-        controller_password: "{{ admin_password }}"
-        controller_host: "https://{{ ansible_host }}"
-        validate_certs: false
-
-    - name: Add an Azure Inventory Source
-      ansible.controller.inventory_source:
-        name: "Azure Source"
-        description: "Source for the Azure Inventory"
-        inventory: "Azure Inventory"
-        credential: "azure_credential"
-        source: azure_rm
-        overwrite: "True"
-        update_on_launch: "True"
-        organization: "Default"
-        state: present
-        execution_environment: "Microsoft Azure Execution Environment"
-        source_vars:
-          hostnames:
-            - computer_name
-          compose:
-            ansible_host: public_ipv4_address[0]
-        controller_username: "{{ username }}"
-        controller_password: "{{ admin_password }}"
-        controller_host: "https://{{ ansible_host }}"
-        validate_certs: false
-
-    - name: Update a single inventory source
-      ansible.controller.inventory_source_update:
-        name: "Azure Source"
-        inventory: "Azure Inventory"
-        organization: "Default"
-        controller_username: "{{ username }}"
-        controller_password: "{{ admin_password }}"
-        controller_host: "https://{{ ansible_host }}"
-        validate_certs: false
 EOF
+#
 export ANSIBLE_LOCALHOST_WARNING=False
 export ANSIBLE_INVENTORY_UNPARSED_WARNING=False
 
