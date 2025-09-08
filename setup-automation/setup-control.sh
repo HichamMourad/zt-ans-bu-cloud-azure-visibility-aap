@@ -42,7 +42,7 @@ tee /tmp/setup.yml << EOF
   tasks:
 
     - name: Add azure credential to automation controller
-      awx.awx.credential:
+      ansible.controller.credential:
         name: azure_credential
         description: Azure Instruqt Credential
         organization: "Default"
@@ -64,7 +64,7 @@ tee /tmp/setup.yml << EOF
       until: controller_try is not failed
 
     - name: Add EE to the controller instance
-      awx.awx.execution_environment:
+      ansible.controller.execution_environment:
         name: "Microsoft Azure Execution Environment"
         image: quay.io/aoc/ee-aap-azure-sre
         controller_username: "{{ username }}"
@@ -73,7 +73,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Add project
-      awx.awx.project:
+      ansible.controller.project:
         name: "Azure Demos Project"
         description: "This is from github.com/ansible-cloud"
         organization: "Default"
@@ -87,7 +87,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Add project
-      awx.awx.project:
+      ansible.controller.project:
         name: "Cloud Visibility Project"
         description: "This is from github.com/ansible-cloud"
         organization: "Default"
@@ -101,7 +101,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Delete native job template
-      awx.awx.job_template:
+      ansible.controller.job_template:
         name: "Demo Job Template"
         state: "absent"
         controller_username: "{{ username }}"
@@ -110,7 +110,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Add ansible-1 host
-      awx.awx.host:
+      ansible.controller.host:
         name: "ansible-1"
         inventory: "Demo Inventory"
         state: present
@@ -125,7 +125,7 @@ tee /tmp/setup.yml << EOF
           ansible_host: "{{ thisaaphostfqdn }}"
 
     - name: Create job template
-      awx.awx.job_template:
+      ansible.controller.job_template:
         name: "{{ item.name }}"
         job_type: "run"
         organization: "Default"
@@ -159,7 +159,7 @@ tee /tmp/setup.yml << EOF
         - { playbook: 'create_windows_vm_demo.yml', name: 'Create Windows Server 2022 VM' }
 
     - name: Create job template
-      awx.awx.job_template:
+      ansible.controller.job_template:
         name: "{{ item.name }}"
         job_type: "run"
         organization: "Default"
@@ -177,7 +177,7 @@ tee /tmp/setup.yml << EOF
         - { playbook: 'create_rhel_vm_demo.yml', name: 'Create RHEL VM' }
 
     - name: Create job template
-      awx.awx.job_template:
+      ansible.controller.job_template:
         name: "Cloud Report"
         job_type: "run"
         organization: "Default"
@@ -193,7 +193,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Launch VMs into Azure
-      awx.awx.job_launch:
+      ansible.controller.job_launch:
         job_template: "Create Windows Server 2022 VM"
         controller_username: "{{ username }}"
         controller_password: "{{ admin_password }}"
@@ -202,7 +202,7 @@ tee /tmp/setup.yml << EOF
       register: job_output
 
     - name: Wait for job
-      awx.awx.job_wait:
+      ansible.controller.job_wait:
         job_id: "{{ job_output.id }}"
         timeout: 3600
         controller_username: "{{ username }}"
@@ -211,7 +211,7 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
 
     - name: Launch VMs into Azure
-      awx.awx.job_launch:
+      ansible.controller.job_launch:
         job_template: "Create RHEL VM"
         controller_username: "{{ username }}"
         controller_password: "{{ admin_password }}"
