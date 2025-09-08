@@ -53,12 +53,12 @@ tee /tmp/setup.yml << EOF
         validate_certs: false
         credential_type: Microsoft Azure Resource Manager
         inputs:
-          subscription: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SUBSCRIPTION_ID') }}"
-          tenant: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_TENANT_ID') }}"
-          username: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_USERNAME') }}"
-          password: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_PASSWORD') }}"
-          client: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_ID') }}"
-          secret: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_SPN_PASSWORD') }}"
+          subscription: "{{ azure_subscription }}"
+          secret: "{{ azure_password }}"
+          client: "{{ azure_client_id }}"
+          tenant: "{{ azure_tenant }}"
+          # username: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_USERNAME') }}"
+          # password: "{{ lookup('env', 'INSTRUQT_AZURE_SUBSCRIPTION_AAPAZURELAB_PASSWORD') }}"
       register: controller_try
       retries: 5
       until: controller_try is not failed
