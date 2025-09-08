@@ -1,4 +1,6 @@
-
+ -- 👋 Introduction ===
++
+==== Estimated time to complete: _5 minutes_<p>
 +
 Welcome to the second challenge.
 For this challenge we will learn how to retrieve public cloud information with a job template.
