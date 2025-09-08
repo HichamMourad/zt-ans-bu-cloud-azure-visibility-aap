@@ -1,47 +1,39 @@
-= Lab Guide: Deploying Applications on Azure VMs
-:toc:
+= Lab Guide: Creating Dynamic Documentation for Azure
+:notoc:
 :toc-title: Table of Contents
 :sectnums:
 :icons: font
 
-_A guide to deploying applications to virtual machines in Microsoft Azure using the Ansible Automation Platform._
-
-*Estimated time to complete: 15 minutes*
-
 ---
 
-**Lab Overview**
+== Lab Guide: Hands-On Tasks
 
-In this final challenge, you will create and run a job template to deploy an application to a Red Hat Enterprise Linux (RHEL) virtual machine on Azure. You will then verify the installation using an ad-hoc command.
+*Estimated time to complete: 5 minutes*
 
----
+Welcome to the third challenge. You will now generate an HTML website using the structured data gathered from your Azure environment.
 
-== Task 1: Create the "Deploy Application" Job Template
+First, log in to the automation controller with the following credentials.
 
-First, you will create a job template with a survey that allows a user to select which application to install and where.
-
-. **Navigate to the Ansible Automation Platform UI.**
-+
-Click on the **Ansible Automation Platform** tab at the top of your lab window.
-
-. **Log in with the provided credentials.**
-+
+.Login Credentials
 [cols="1,2a"]
 |===
-| Parameter | Value
 | Username | `admin`
 | Password | `ansible123!`
 |===
 
+=== Task 1: Create the "Create Report" Job Template
+
+You will start by creating a job template that runs a playbook to generate the cloud report.
+
 . **Navigate to the Templates page.**
 +
-Expand the `Automation Execution` menu on the left.
-`Automation Execution` -> `Templates`.
+In the left navigation menu, go to **Resources** → **Templates**.
++
+image::https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true[Templates link in the navigation menu, opts="border"]
 
-. **Initiate the creation of a new job template.**
+. **Create a new job template.**
 +
-Click the `+ Create Template` then scroll down and click `Create job template`
-+
+**Click** the blue **Add** button and select **Add job template**.
 
 . **Enter the job template details.**
 +
@@ -50,115 +42,64 @@ Fill out the form with the following information:
 [cols="1,1"]
 |===
 | Parameter | Value
-| Name | `Deploy Application`
+| Name | `Create Report`
 | Job Type | `Run`
 | Inventory | `Azure Inventory`
-| Project | `Product Demos Project`
-| Playbook | `linux/deploy_application.yml`
-| Execution Environment | `Default execution environment`
-| Credentials | `RHEL on Azure`
+| Project | `Cloud Visibility Project`
+| Execution Environment | `Microsoft Azure Execution Environment`
+| Playbook | `playbooks/cloud_report_azure.yml`
+| Credentials | `azure_credential`
 |===
++
+TIP: To find the `azure_credential`, you may need to filter the *Credential Type* to `Microsoft Azure Resource Manager`.
 
 . **Save the job template.**
 +
-Scroll to the bottom, click `Create job template`.
+**Click** the blue **Save** button.
 
-. **Add the first survey question.**
-+
-Navigate to the `Survey` tab and click the blue `Create survey question` button. Configure the first question as follows:
-+
-[cols="1,1"]
-|===
-| Parameter | Value
-| Question | `Enter the Linux Host you want to deploy the application to`
-| Answer variable name | `_hosts`
-| Answer type | `Text`
-| Default answer | `RHEL-ansible`
-|===
-+
-Click `Create survey question`.
+NOTE: The Ansible Playbooks for this lab are sourced from this link:https://github.com/ansible-cloud/azure_visibility[project on GitHub].
 
-. **Add the second survey question.**
-+
-On the survey page, click the blue `Create survey question` button. Configure the second question as follows:
-+
-[cols="1,1"]
-|===
-| Parameter | Value
-| Question | `Which application do you want to install?`
-| Answer variable name | `application`
-| Answer type | `Multiple Choice (single select)`
-| Multiple Choice Options | `nginx`, `gdb`, `httpd`, `nano`
-|===
-+
-NOTE: After entering the options, select the radio button next to `nginx` to make it the `Default option`.Click `Create survey question`.
+=== Task 2: Launch the Job Template
 
-. **Enable the survey.**
+Now you are ready to run the job and generate the report.
+
+. **Launch the job template.**
 +
-You must **enable the survey** by clicking the toggle switch at the top of the survey page. The text will change from `SURVEY Disabled` to `SURVEY enabled`.
-
-== Task 2: Run the Job Template
-
-Now you will launch the template and use the survey to deploy an application.
-
-. **Navigate to the Templates page.**
+From the **Templates** page, find the `Create Report` template and **click** the **Launch** icon (🚀).
 +
-Expand the `Automation Execution` menu on the left.
-`Automation Execution` -> `Templates`.
+image:https://github.com/IPvSean/pictures_for_github/blob/master/launch_job.png?raw=true[Launch Job Icon, 30, opts="border"]
 
-. **Launch the "Deploy Application" job template.**
+. **Understand the playbook execution.**
 +
-Find the `Deploy Application` template and click `🚀 Launch template` icon.
-
-. **Complete the survey and run the job.**
+This playbook uses two roles:
 +
-You will be prompted with the survey. The default values are correct (`RHEL-ansible` for the host, and `nginx` for the application). Accept the default answers by clicking `Next`, then click `Finish` to run the job.
+. The first role retrieves structured data for regions, virtual networks, and virtual machines.
+. The second role creates an HTML report. It installs a web server, copies assets (CSS, images), and uses the structured data to generate a dynamic website.
 
-. **Monitor the job progress.** and observe the output.
+. **View the generated report.**
 +
-The job will take a few moments to complete. The output will confirm that `nginx` was installed on the `RHEL-ansible` host.
-
-== Task 3: Verify Installation with an Ad-Hoc Command
-
-Finally, you will run an ad-hoc command to confirm that the `nginx` service was installed and is running.
-
-. **Navigate to the Azure Inventories**
+Once the job completes, **navigate** to the **Dynamic Report** tab at the top of your lab window. You may need to refresh the page (⟳). **Click** on the gray boxes with the caret (`▸`) to expand the tables with additional information.
 +
-Expand the `Automation Execution` menu on the left.
-`Automation Execution` -> `Infrastructure` -> `Inventories`.
+You will see a report similar to this:
++
+image::../assets/azure_report.png[Generated Azure cloud report, opts="border"]
 
-. **Select the Azure Inventory.**
-+
-Click on the inventory named `Azure Inventory`. Then select the `Hosts` tab.
+=== Task 3: Analyze the Report
 
-. **Select the host and initiate the command.**
-+
-Select the checkbox next to `RHEL-ansible`, then click the `Run Command` button.
+A cloud operator can use this report to quickly gain awareness of their cloud footprint. It combines information from several info modules, which correspond to multiple Azure API calls.
 
-. **Configure the ad-hoc command.**
-+
-A wizard will appear. Fill it out as follows:
-+
---
-a. *Details View:* From the *Module* dropdown, select `service`. In the *Arguments* field, enter `name=nginx`. Click `Next`.
-b. *Execution Environment View:* Select `Default execution environment` from the dropdown. Click `Next`.
-c. *Credential View:* Select `RHEL on Azure` from the dropdown. Click `Next`.
---
+Important considerations for a cloud operator include:
 
-. **Launch the ad-hoc command.**
-+
-On the *Review* screen, click Click `Finish` to launch the ad-hoc command.
+* How can we identify virtual networks in Azure that are not in use and can be safely deleted?
+* Which regions are running instances versus which ones are empty?
+* Which regions have stopped instances that may turn on at any moment?
 
-. **Observe the output.**
-+
-The job will complete in a few moments. The output will show details about the `nginx` service on the host, confirming its status.
+---
 
 == Conclusion
 
-Thank you for taking the time to learn about automating cloud operations tasks in Azure using the Red Hat Ansible Automation Platform!
-
-In this lab, you have seen how automation can be used to deploy applications and how ad-hoc commands can perform quick checks on target hosts. These same principles can be easily applied to other cloud environments.
+You have successfully completed this lab! Press the `Check` button below to validate your work.
 
 == Troubleshooting
 
-If you have encountered an issue or have noticed something not quite right, please open an issue with the lab maintainers.
+If you have encountered an issue or have noticed something not quite right, please link:https://github.com/ansible/instruqt/issues/new?title=Issue+with+Ansible+Hybrid+Cloud+Automation+-+Infrastructure+visibility&assignees=ipvsean[open an issue on GitHub].
