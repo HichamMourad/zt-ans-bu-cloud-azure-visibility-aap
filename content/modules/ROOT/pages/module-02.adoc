@@ -1,140 +1,191 @@
-= Lab Guide: Automating OS Patching on Azure VMs
-:toc:
-:toc-title: Table of Contents
-:sectnums:
-:icons: font
+title: Retrieve Azure cloud information notes:
 
-_A guide to creating a Job Template to perform and report on OS patching for virtual machines in Microsoft Azure._
-
-*Estimated time to complete: 15 minutes*
-
----
-
-**Lab Overview**
-
-In this challenge, you will create a Job Template to automate the patching of a Red Hat Enterprise Linux (RHEL) server running on Azure. You will also configure the job to generate an HTML report that can be viewed from a web browser.
-
----
-
-== Task 1: Create and Run the Patching Job Template
-
-You will start by creating a job template, adding a survey to make it interactive, and then running it to patch the Linux host.
-
-. **Navigate to the Ansible Automation Platform UI.**
+* type: text contents: |-   # Challenge summary
 +
-Click on the **Ansible Automation Platform** tab at the top of your lab window.
-
-. **Log in with the provided credentials.**
+In this challenge, you'll perform automation against your Microsoft Azure public cloud environment.
+You will also learn how to create a `Job Template` in Automation controller.
 +
-[cols="1,2a"]
+You will launch a number of job templates to perform the following:
+
+ ** Retrieve information about regions (https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/#overview[also referred to as geographies or locations])
+ ** Retrieve information about Virtual Networks
+ ** Retrieve information about Virtual Machines
+
+* type: text contents: |-   # Infrastructure visibility
++
+Cloud automation begins and ends with structured data.
+Ansible can help retrieve information from your public cloud to help you understand your cloud footprint.
++
+image::https://github.com/IPvSean/pictures_for_github/blob/master/visbility.png?raw=true[]
+
+* type: text contents: |+   # Understanding Job Templates
++
+A job template is a definition and set of parameters for running an Ansible job.
+Job templates are useful to execute the same job many times.
+Job templates also encourage the reuse of Ansible playbook content and collaboration between teams.
++
+image::https://github.com/IPvSean/pictures_for_github/blob/master/job_template.png?raw=true[]
+
+* type: text contents: |-   # Lets get started
++
+That is the end of of your challenge briefing!
++
+Once the lab is setup you can click the Green start button image:https://github.com/IPvSean/pictures_for_github/blob/master/start_button.png?raw=true[,100px] in the bottom right corner of this window.
+tabs:
+
+* id: ti8p7ukhiivm title: Ansible Automation Controller type: service hostname: controller path: / port: 443
+* id: 1pnagcbh0n1b title: Azure Portal type: website url: https://portal.azure.com/#home new_window: true
+* id: dxrncfttfsdu title: Azure Portal Account type: service hostname: azurecloudclient port: 80 difficulty: basic timelimit: 900 enhanced_loading: null -- 👋 Introduction ===
++
+==== Estimated time to complete: _5 minutes_<p>
++
+Welcome to the second challenge.
+For this challenge we will learn how to retrieve public cloud information with a job template.
+
+Login to Automation controller with the following credentials
+
+[cols=2*]
 |===
-| Parameter | Value
-| Username | `admin`
-| Password | `ansible123!`
+| username:
+| `admin`
+
+| password:
+| `ansible123!`
 |===
 
-. **Navigate to the Templates page.**
-+
-Expand the `Automation Execution` menu on the left.
-`Automation Execution` -> `Templates`.
+= ☑️ Task 1 - Create a Job Template
 
-. **Initiate the creation of a new job template.**
-+
-Click the `+ Create Template` then scroll down and click `Create job template`
+To create a *Job Template* we need three main components:
 
-. **Enter the job template details.**
-+
-Fill out the form with the following information:
-+
-[cols="1,1"]
-|===
-| Parameter | Value
-| Name | `Linux Patching`
-| Job Type | `**RUN**`
-| Inventory | `Azure Inventory`
-| Project | `Product Demos Project`
-| Playbook | `linux/patching.yml`
-| Execution Environment | `Default execution environment`
-| Credentials | `RHEL on Azure`
-|===
-+
-TIP: To select the credential, click in the text field or on the drop down icon, then select the `RHEL on Azure` credential.
+. An *inventory* to run the automation against
+. A *credential* to access the API
+. A *project* to sync playbooks from.
 
-. **Save the job template.**
-+
-Scroll to the bottom, click `Create job template`.
+Click the *Templates* link in the left navigation menu underneath the Resources tab.
 
-. **Add the first survey question.**
-+
-Navigate to the `Survey` tab and click the blue `Create survey question` button. Configure the first question as follows:
-+
-[cols="1,1"]
-|===
-| Parameter | Value
-| Question | `Enter the Linux Host you want to patch`
-| Answer variable name | `_hosts`
-| Answer type | `Text`
-| Default answer | `RHEL-ansible`
-|===
-+
-Click `Create survey question`.
+image::https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true[,150]
 
-. **Add the second survey question.**
-+
-On the survey page, click the blue `Create survey question` button. Configure the second question as follows:
-+
-[cols="1,1"]
-|===
-| Parameter | Value
-| Question | `Where should the report be generated?`
-| Answer variable name | `report_server`
-| Answer type | `Text`
-| Default answer | `RHEL-ansible`
-|===
-+
-Click `Create survey question`.
+* Now click on `Add` then scroll down and click  `Add job template`
 
-. **Enable the survey.**
-+
-You must **enable the survey** by clicking the toggle switch at the top of the survey page. The text will change from `SURVEY Disabled` to `SURVEY enabled`.
+image:https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true[,200] + Fill out the following fields:
 
-. **Launch the template.**
-+
-Navigate back to the **Templates** page. Find the `Linux Patching` template and click `🚀 Launch template` icon.
+'''+++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
++++<tr>++++++<td>+++Name+++</td>++++++<td>+++Retrieve region info+++</td>+++
++++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
++++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
++++<tr>++++++<td>+++Project+++</td>++++++<td>+++Cloud Visibility Project+++</td>+++
++++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Microsoft Azure Execution Environment+++</td>+++
++++<tr>++++++<td>+++Playbook+++</td>++++++<td>++++++<code>+++playbooks/retrieve_regions.yml+++</code>++++++</td>+++
++++<tr>++++++<td>+++Credentials+++</td>++++++<td>++++++<code>+++azure_credential+++</code>++++++</td>+++
+</table>
++++<hr>++++++</hr>+++
 
-. **Complete the survey and run the job.**
-+
-You will be prompted with the survey questions. Accept the default answers by clicking `Next`, then click `Finish` to run the job.
+* If you have trouble finding the `azure_credential` make sure you are looking under the Credential Type `Microsoft Azure Resource Manager`
 
-. **Observe the output.**
-+
-The job will run and apply any available patches to the `RHEL-ansible` host. The output will contain URLs for the reports, which you will view in the next task.
+Click the blue **Save** button.
 
----
 
-== Task 2: View the Patching Report
+The project we are loading Ansible Playbooks from can be found here +++<a target="_new" href="https://github.com/ansible-cloud/azure_visibility">+++on GitHub+++</a>+++
 
-The automation job generates HTML reports detailing the available patches and what actions were taken.
 
-. **Locate the report URLs in the job output.**
-+
-The output from the `Linux Patching` job will contain URLs for the generated reports. They will look similar to this:
-+
-* `http://<IP_ADDRESS>/reports/linux.html`
-* `http://<IP_ADDRESS>/reports/linuxpatch.html`
+☑️ Task 2 - Launch the Job Template
+===
 
-. **View the reports.**
-+
-Copy and paste each URL into a new browser tab to view them. The `linuxpatch.html` report provides a detailed list of all package updates that were installed or removed.
+Click the **Templates** link in the left navigation menu underneath the Resources tab.  You will see your `Retrieve Region Info` job template.
 
-. **Re-run the job and observe the changes.**
-+
-Launch the `Linux Patching` job a second time. Once it completes, refresh the report URLs in your browser. You will see that the report has been updated with the latest information, confirming that no new patches were needed.
+Click the rocket symbol to `Launch Template`.
++++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/launch_job.png?raw=true" style="width:80px;margin-left:0px">++++++</img>+++
 
-NOTE: While this challenge focuses on Linux, Ansible Automation Platform can be used to perform Windows patching with similar workflows.
+This playbook has two tasks. The first task `azure.azcollection.azure_rm_resource_info` will retrieve structured data for locations.  The 2nd task will use the `ansible.builtin.debug` module to print this out to the terminal which we can see in the automation controller job window.
 
----
+Click on the `print var all_regions` task output then click on the `JSON` tab.  You will see the structured data retrieve for all available regions on the Microsoft Azure account.  We have pre-configured one (1) region `useast` with a virtual network and two virtual machines.
 
-== Next Steps
+![json_data.png](../assets/json_data.png)
 
-You have successfully completed this challenge. Press the `Next` button in your lab environment to proceed to the next challenge.
+This structured data can be used in our future challenge to create dynamic documentation.
+
+
+☑️ Task 3 - Create more job templates
+===
+
+There is two more job templates similar to the `Retrieve Region Info`  we can create.  One for virtual networks and one for virtual machines.
+
+Create the following two job templates:
+
++++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true" style="width:200px;margin-left:0px">++++++</img>++++++<br>++++++</br>+++
+Fill out the following fields:
++++<hr>++++++</hr>+++
++++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
++++<tr>++++++<td>+++Name+++</td>++++++<td>+++Retrieve virtual networks info+++</td>+++
++++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
++++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
++++<tr>++++++<td>+++Project+++</td>++++++<td>+++Cloud Visibility Project+++</td>+++
++++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Microsoft Azure Execution Environment+++</td>+++
++++<tr>++++++<td>+++Playbook+++</td>++++++<td>++++++<code>+++playbooks/retrieve_networks.yml+++</code>++++++</td>+++
++++<tr>++++++<td>+++Credentials+++</td>++++++<td>++++++<code>+++azure_credential+++</code>++++++</td>+++
+</table>
++++<hr>++++++</hr>+++
+
++++<hr>++++++</hr>+++
+
++++<table>++++++<tr>++++++<td>+++Name+++</td>++++++<td>++++++<b>+++Retrieve virtual machines info+++</b>++++++</td>+++
++++<tr>++++++<td>+++Job Type+++</td>++++++<td>+++Run+++</td>+++
++++<tr>++++++<td>+++Inventory+++</td>++++++<td>+++Azure Inventory+++</td>+++
++++<tr>++++++<td>+++Project+++</td>++++++<td>+++Cloud Visibility Project+++</td>+++
++++<tr>++++++<td>+++Execution Environment+++</td>++++++<td>+++Microsoft Azure Execution Environment+++</td>+++
++++<tr>++++++<td>+++Playbook+++</td>++++++<td>++++++<code>+++playbooks/retrieve_vms.yml+++</code>++++++</td>+++
++++<tr>++++++<td>+++Credentials+++</td>++++++<td>++++++<code>+++azure_credential+++</code>++++++</td>+++
+</table>
+
+Run these two job templates and examine the output.  You will see that under the `Retrieve Virtual Machines Info` Job Template that you will retrieve two virtual machines, `RHEL-ansible` and `WIN-ansible`.
+
+☑️ Task 4 - Create a Survey
+===
+
+Click the **Templates** link in the left navigation menu underneath the Resources tab.  You will see your `Retrieve Virtual Machines Info` job template.
+
++++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true" style="width:200px;margin-left:0px">++++++</img>+++
+
+* Click the `Retrieve Virtual Machines Info` link to open the job template.
+* Now, click the `Survey` tab at the top of the job template.
+
++++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/survey_tab.png?raw=true" style="width:400px;margin-left:0px">++++++</img>+++
+
+* Click the blue `Add` button.
+
++++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/survey_add.png?raw=true" style="width:100px;margin-left:0px">++++++</img>+++
+
+Fill out the following values:
++++<hr>++++++</hr>+++
+
++++<table>++++++<tr>++++++<th>+++Parameter+++</th>++++++<th>+++Value+++</th>++++++</tr>+++
++++<tr>++++++<td>+++Question+++</td>++++++<td>+++What tag do you want to filter on?+++</td>++++++<tr>++++++<tr>++++++<td>+++Answer variable name+++</td>++++++<td>++++++<code>+++your_tags+++</code>++++++</td>++++++<tr>++++++<tr>++++++<td>+++Answer type+++</td>++++++<td>+++text+++</td>++++++<tr>++++++<tr>++++++<td>+++Required+++</td>++++++<td>+++☑️+++</td>++++++<tr>++++++<tr>++++++<td>+++Default answer+++</td>++++++<td>++++++<code>+++demo:true+++</code>++++++</td>++++++</tr>+++
+</table>
+
+Click the blue **Save** button.
+
++++<hr>++++++</hr>+++
+
+Make sure to click the toggle button to enabled the survey.
+
++++<img src="https://github.com/IPvSean/pictures_for_github/blob/master/survey_enabled.png?raw=true" style="width:200px;margin-left:0px">++++++</img>+++
+
+Either click the `Details` tab or click the **Templates** link in the left navigation menu underneath the Resources tab.  You will see your `Retrieve Virtual Machines Info` job template again.  Launch the job again.
+
++++<hr>++++++</hr>+++
+
+This time you will see a survey prompt!
+
+Surveys set extra variables for the playbook in a user-friendly question and answer way.  This allows you to abstract complexity using question and answer format.
+
+Try using `os:windows` to only retrieve the Windows virtual machine or `os:linux` to retrieve the Red Hat Enterprise Linux machine.  This may seem super simple for two virtual machines, but when there are hundreds of virtual machines running, it is necessary to filter by tags to help manage, and automate different machines.
+
+
+✅ Next Challenge
+===
+Press the `Check` button below to go to the next challenge once you've completed the task.
+
+🐛 Encountered an issue?
+====
+
+If you have encountered an issue or have noticed something not quite right, please [open an issue](https://github.com/ansible/instruqt/issues/new?title=Issue+with+Ansible+Hybrid+Cloud+Automation+-+Infrastructure+visibility&assignees=ipvsean).+++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</tr>++++++</table>+++
