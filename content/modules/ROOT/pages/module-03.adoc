@@ -41,13 +41,13 @@ Fill out the form with the following information:
 [cols="1,1"]
 |===
 | Parameter | Value
-| Name | `Create Report`
+| Name | `Create Azure Cloud Report`
 | Job Type | `Run`
 | Inventory | `Azure Inventory`
 | Project | `Cloud Visibility Project`
 | Playbook | `playbooks/cloud_report_azure.yml`
 | Execution Environment | `Microsoft Azure Execution Environment`
-| Credentials | `azure_credential` AND `RHEL on Azure`
+| Credentials | `azure_credential` AND `SSH Controller Credential`
 |===
 +
 TIP: To select the `azure_credential`, click in the text field or on the drop down icon, then select `Microsoft Azure Resource Manager`.
@@ -64,7 +64,7 @@ Now you are ready to run the job and generate the report.
 
 . **Launch the job template.**
 +
-From the **Templates** page, find the `Create Report` template and **click** the **Launch** icon (🚀).
+Navigate back to the **Templates** page. Find the `Create Azure Cloud Report` template and click `🚀 Launch template` icon.
 +
 image:https://github.com/IPvSean/pictures_for_github/blob/master/launch_job.png?raw=true[Launch Job Icon, 30, opts="border"]
 
@@ -77,7 +77,7 @@ This playbook uses two roles:
 
 . **View the generated report.**
 +
-Once the job completes, **navigate** to the **Dynamic Report** tab at the top of your lab window. You may need to refresh the page (⟳). **Click** on the gray boxes with the caret (`▸`) to expand the tables with additional information.
+Once the job completes, **navigate** to the `Dynamic Report` tab at the top of your lab window. You may need to refresh the page (⟳). `Click` on the gray boxes with the caret (`▸`) to expand the table rows with additional information.
 +
 You will see a report similar to this:
 +
@@ -97,7 +97,7 @@ Important considerations for a cloud operator include:
 
 == Conclusion
 
-You have successfully completed this lab! Press the `Check` button below to validate your work.
+You have successfully completed this lab! We hope you enjoyed learning about how Ansible can be used to create dynamic documentation for your Azure environment.
 
 == Troubleshooting
 

@@ -229,6 +229,7 @@ tee /tmp/setup.yml << EOF
         playbook: "playbooks/cloud_report_azure.yml"
         credentials:
           - "azure_credential"
+          - "SSH Controller Credential"
         state: "present"
         controller_username: "{{ username }}"
         controller_password: "{{ admin_password }}"
