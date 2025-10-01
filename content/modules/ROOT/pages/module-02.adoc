@@ -15,7 +15,7 @@ This section provides an overview of the lab challenge and instructions for gett
 
 === Challenge Summary
 
-In this challenge, you'll perform automation against your Microsoft Azure public cloud environment. You will create a **Job Template** in the automation controller and launch it to perform the following actions:
+In this challenge, you'll perform automation against your Microsoft Azure public cloud environment. You will create a `Job Template` in Ansible Automation Platform and launch it to perform the following actions:
 
 * Retrieve information about Azure link:https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/#overview[regions].
 * Retrieve information about Virtual Networks.
@@ -23,31 +23,29 @@ In this challenge, you'll perform automation against your Microsoft Azure public
 
 === Infrastructure Visibility
 
-Cloud automation begins and ends with structured data. Ansible can help retrieve information from your public cloud to help you understand your cloud footprint and make informed decisions.
+Cloud automation begins and ends with structured data. Ansible Automation Platform can help retrieve information from your public cloud to help you understand your cloud footprint and make informed decisions.
 
 image::https://github.com/IPvSean/pictures_for_github/blob/master/visbility.png?raw=true[Diagram of infrastructure visibility, opts="border"]
 
 === Understanding Job Templates
 
-A **job template** is a definition and set of parameters for running an Ansible job. Job templates are useful for executing the same job many times and they encourage the reuse of Ansible playbook content and collaboration between teams.
+A `job template` is a definition and set of parameters for running an Ansible job. Job templates are useful for executing the same job many times and they encourage the reuse of Ansible playbook content and collaboration between teams.
 
 image::https://github.com/IPvSean/pictures_for_github/blob/master/job_template.png?raw=true[Example of a job template, opts="border"]
 
 === Getting Started
 
-That is the end of your challenge briefing! Please click the green **Start** button in the bottom right corner of this window if the lab has not already started.
-
-image:https://github.com/IPvSean/pictures_for_github/blob/master/start_button.png?raw=true[Start Button, 100, opts="border"]
+That is the end of your challenge briefing! Let's get started!
 
 ---
 
 == Lab Guide: Hands-On Tasks
 
-*Estimated time to complete: 10 minutes*
+*Estimated time to complete: 15 minutes*
 
 Welcome to the second challenge. You will now learn how to retrieve public cloud information with a job template.
 
-First, log in to the automation controller with the following credentials.
+First, log in to the Ansible Automation Platform with the following credentials.
 
 .Login Credentials
 [cols="1,2a"]
@@ -62,15 +60,14 @@ To create a Job Template, you need three main components: an **inventory**, a **
 
 . **Navigate to the Templates page.**
 +
-In the left navigation menu, go to **Resources** → **Templates**.
+Expand the `Automation Execution` menu on the left.
+`Automation Execution` -> `Templates`.
 +
-image::https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true[Templates link in navigation menu, 150, opts="border"]
 
 . **Create a new job template.**
 +
-**Click** the blue **Add** button and select **Add job template**.
+Click the `+ Create Template` then scroll down and click `Create job template`
 +
-image:https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true[Add job template button, 200, opts="border"]
 
 . **Enter the job template details.**
 +
@@ -83,16 +80,16 @@ Fill out the form with the following information:
 | Job Type | `Run`
 | Inventory | `Azure Inventory`
 | Project | `Cloud Visibility Project`
-| Execution Environment | `Microsoft Azure Execution Environment`
 | Playbook | `playbooks/retrieve_regions.yml`
+| Execution Environment | `Microsoft Azure Execution Environment`
 | Credentials | `azure_credential`
 |===
 +
-TIP: To find the `azure_credential`, you may need to filter the *Credential Type* to `Microsoft Azure Resource Manager`.
+TIP: To select the `azure_credential`, click in the text field or on the drop down icon, then select `Microsoft Azure Resource Manager`.
 
 . **Save the job template.**
 +
-**Click** the blue **Save** button.
+Scroll to the bottom, click `Create job template`, and then `🚀 Launch template`.
 
 NOTE: The Ansible Playbooks for this lab are sourced from this link:https://github.com/ansible-cloud/azure_visibility[project on GitHub].
 
@@ -102,17 +99,14 @@ Now you are ready to run the job and view the retrieved data.
 
 . **Launch the job template.**
 +
-From the **Templates** page, find the `Retrieve region info` template and **click** the **Launch** icon (🚀).
+From the **Templates** page, find the `Retrieve region info` template and then `🚀 Launch template`.
 +
-image:https://github.com/IPvSean/pictures_for_github/blob/master/launch_job.png?raw=true[Launch Job Icon, 80, opts="border"]
 
 . **Review the job output.**
 +
 This playbook runs two tasks. The first, `azure.azcollection.azure_rm_resource_info`, retrieves structured data. The second, `ansible.builtin.debug`, prints it to the job output.
 +
-**Click** on the `print var all_regions` task, then select the **JSON** tab to see the structured data for all available Azure regions.
-+
-image::../assets/json_data.png[JSON data output in the job view, opts="border"]
+**Click** on the `print var all_regions` task, then select the `Data` and then select the `JSON` sub-tab to see the structured data for all available Azure regions.
 
 === Task 3: Create More Job Templates
 
@@ -120,7 +114,7 @@ Next, create two more job templates to retrieve information about virtual networ
 
 . **Create the "Retrieve virtual networks info" template.**
 +
-image:https://github.com/IPvSean/pictures_for_github/blob/master/add_job_template.png?raw=true[Add job template button, 200, opts="border"]
+
 +
 [cols="1,1"]
 |===
@@ -130,6 +124,10 @@ image:https://github.com/IPvSean/pictures_for_github/blob/master/add_job_templat
 |===
 +
 NOTE: Use the same Inventory, Project, Execution Environment, and Credentials as the first template. **Save** the template.
+
+. **Save the job template.**
++
+Scroll to the bottom, click `Create job template`.
 
 . **Create the "Retrieve virtual machines info" template.**
 +
@@ -141,6 +139,10 @@ NOTE: Use the same Inventory, Project, Execution Environment, and Credentials as
 |===
 +
 NOTE: Use the same Inventory, Project, Execution Environment, and Credentials as the first template. **Save** the template.
+
+. **Save the job template.**
++
+Scroll to the bottom, click `Create job template`.
 
 . **Run the new templates.**
 +
@@ -158,10 +160,9 @@ image:https://github.com/IPvSean/pictures_for_github/blob/master/survey_tab.png?
 
 . **Create a new survey question.**
 +
-**Click** the blue **Add** button.
+**Click** the blue `+ Create survey question` button.
 +
-image:https://github.com/IPvSean/pictures_for_github/blob/master/survey_add.png?raw=true[Add survey button, 100, opts="border"]
-+
+
 Fill out the form with the following values:
 +
 [cols="1,1"]
@@ -174,7 +175,7 @@ Fill out the form with the following values:
 | Default answer | `demo:true`
 |===
 +
-**Click** the blue **Save** button.
+**Click** the blue `Create survey question` button to save the question.
 
 . **Enable and launch the survey.**
 +
@@ -194,7 +195,7 @@ TIP: Try using `os:windows` to retrieve only the Windows virtual machine, or `os
 
 == Next Steps
 
-Press the `Check` button below to proceed to the next challenge.
+Press the `Next` button below to proceed to the next challenge.
 
 == Troubleshooting
 

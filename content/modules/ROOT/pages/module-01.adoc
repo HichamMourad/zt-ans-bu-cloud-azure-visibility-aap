@@ -8,15 +8,11 @@ _A guide to understanding and using the automation controller to create and mana
 
 ---
 
-== Lab Briefing
+=== Lab Briefing
 
 This section provides an overview of the lab environment and key concepts in Ansible Automation Platform.
 
-=== Lab Instructions
-
-Please click the green **Start** button on the bottom right corner to create the lab environment if it has not already started. To navigate through this briefing, click the white `>` arrow on the right.
-
-image:https://github.com/IPvSean/pictures_for_github/blob/master/start_button.png?raw=true[Start Button, 100, opts="border"]
+The goal of this lab is to illustrate how Ansible info modules can retrieve from public clouds can provide us awareness of our cloud footprint easily and output it to anything.
 
 === Automation controller
 
@@ -66,13 +62,13 @@ Credentials are used to authenticate to machines, inventory sources, and version
 
 . **Navigate to the Credentials page.**
 +
-In the left navigation menu, go to **Resources** → **Credentials**.
+Expand the `Automation Execution` menu on the left.
+`Automation Execution` -> `Infrastructure` -> `Credentials`.
 
 . **Create a new credential.**
 +
-**Click** the blue **Add** button.
+**Click** the blue `+ Create credential` button.
 +
-image::../assets/add_button.png[Add button on the Credentials page, opts="border"]
 
 . **Enter the credential details.**
 +
@@ -90,7 +86,7 @@ Fill out the form with the following information:
 
 . **Save the credential.**
 +
-**Click** the blue **Save** button at the bottom.
+**Click** the blue `Create credential` button at the bottom.
 
 NOTE: Passwords and keys are encrypted. Once saved in the automation controller, no one, including administrators, can view the sensitive values.
 
@@ -100,13 +96,13 @@ Next, you will create a new inventory to hold your dynamically discovered hosts 
 
 . **Navigate to the Inventories page.**
 +
-In the left navigation menu, go to **Resources** → **Inventories**.
+Expand the `Automation Execution` menu on the left.
+`Automation Execution` -> `Infrastructure` -> `Inventories`.
 
 . **Create a new inventory.**
 +
-**Click** the blue **Add** button and select **Add inventory**.
+**Click** the blue `+ Create inventory` button and select `Create inventory.
 +
-image:https://github.com/IPvSean/pictures_for_github/blob/master/add_inventory.png?raw=true[Add a new inventory, 200, opts="border"]
 
 . **Enter the inventory details.**
 +
@@ -119,7 +115,7 @@ image:https://github.com/IPvSean/pictures_for_github/blob/master/add_inventory.p
 
 . **Save the inventory.**
 +
-**Click** the blue **Save** button.
+**Click** the blue `Create inventory` button.
 
 === Task 3: Create an Inventory Source
 
@@ -127,13 +123,12 @@ Now you will configure a source to dynamically pull host information from your A
 
 . **Navigate to the Sources tab.**
 +
-Within your newly created `Azure Inventory`, **click** the **Sources** tab.
+Within your newly created `Azure Inventory`, **click** the `Sources` tab.
 +
-image:https://github.com/IPvSean/pictures_for_github/blob/master/sources-savage.png?raw=true[Inventory Sources tab, 300, opts="border"]
 
 . **Create a new source.**
 +
-**Click** the blue **Add** button.
+**Click** the blue `+ Create source` button.
 
 . **Enter the source details.**
 +
@@ -150,9 +145,9 @@ Fill out the form with the following information:
 
 . **Add the source variables.**
 +
-In the `Source variables` YAML editor, **paste** the following code. This configures the inventory to use the `name` tag as the hostname and the public IP address for connections.
+In the `Source variables` YAML editor below, **paste** the following code. This configures the inventory to use the `name` tag as the hostname and the public IP address for connections.
 +
-[source,yaml]
+[source,yaml,role=execute]
 ----
 ---
 hostnames:
@@ -163,7 +158,7 @@ compose:
 
 . **Save and sync the source.**
 +
-**Click** **Save**, then **click** **Sync** to retrieve the inventory from Microsoft Azure.
+**Click** `Create source`, then **click** `Launch inventory update` to retrieve the inventory from Microsoft Azure.
 
 === Task 4: Examine the Inventory and Run an Ad-Hoc Command
 
@@ -171,9 +166,8 @@ Finally, you will examine the discovered hosts and run a command to verify conne
 
 . **Navigate to the Hosts view.**
 +
-Once the sync is complete, return to the `Azure Inventory` details and **click** the **Hosts** tab. You should see two hosts listed: `RHEL-ansible` and `WIN-ansible`.
+Once the sync is complete, return to the `Azure Inventory` details and **click** the `Hosts` tab. You should see two hosts listed: `RHEL-ansible` and `WIN-ansible`.
 +
-image:https://github.com/IPvSean/pictures_for_github/blob/master/ansible-for-azure-infrastructure-visibility/azure_inventory_menu.png?raw=true[Azure Inventory menu, 400, opts="border"]
 
 . **Run an ad-hoc command on the RHEL host.**
 +
@@ -184,14 +178,14 @@ image:https://github.com/IPvSean/pictures_for_github/blob/master/ansible-for-azu
 Fill out the wizard prompts as follows:
 +
 --
-a. *Details View:* From the *Module* dropdown, select `ping`. Click **Next**.
-b. *Execution Environment View:* Select `Default execution environment`. Click **Next**.
-c. *Credential View:* Select `RHEL on Azure`. Click **Next**.
+a. *Details View:* From the *Module* dropdown, select `ping`. Click `Next`.
+b. *Execution Environment View:* Select `Default execution environment`. Click `Next`.
+c. *Credential View:* Select `RHEL on Azure`. Click `Next`.
 --
 
 . **Launch the ad-hoc command.**
 +
-On the *Preview* screen, **click** the **Launch** button.
+On the *Review* screen, click the `Finish` button.
 
 The ad-hoc command runs the Ansible link:https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ping_module.html[ping] module, which verifies connectivity to the RHEL instance running on Azure.
 
@@ -199,7 +193,7 @@ The ad-hoc command runs the Ansible link:https://docs.ansible.com/ansible/latest
 
 == Next Steps
 
-Press the `Check` button below to proceed to the next challenge.
+Press the `Next` button below to proceed to the next challenge.
 
 == Troubleshooting
 
