@@ -8,7 +8,7 @@
 
 == Lab Guide: Hands-On Tasks
 
-*Estimated time to complete: 5 minutes*
+*Estimated time to complete: 20 minutes*
 
 Welcome to the third challenge. You will now generate an HTML website using the structured data gathered from your Azure environment.
 
@@ -27,13 +27,12 @@ You will start by creating a job template that runs a playbook to generate the c
 
 . **Navigate to the Templates page.**
 +
-In the left navigation menu, go to **Resources** → **Templates**.
-+
-image::https://github.com/IPvSean/pictures_for_github/blob/master/job_templates.png?raw=true[Templates link in the navigation menu, opts="border"]
+Expand the `Automation Execution` menu on the left.
+`Automation Execution` -> `Templates`.
 
 . **Create a new job template.**
 +
-**Click** the blue **Add** button and select **Add job template**.
+Click the `+ Create Template` then scroll down and click `Create job template`
 
 . **Enter the job template details.**
 +
@@ -46,16 +45,16 @@ Fill out the form with the following information:
 | Job Type | `Run`
 | Inventory | `Azure Inventory`
 | Project | `Cloud Visibility Project`
-| Execution Environment | `Microsoft Azure Execution Environment`
 | Playbook | `playbooks/cloud_report_azure.yml`
-| Credentials | `azure_credential`
+| Execution Environment | `Microsoft Azure Execution Environment`
+| Credentials | `azure_credential` AND `RHEL on Azure`
 |===
 +
-TIP: To find the `azure_credential`, you may need to filter the *Credential Type* to `Microsoft Azure Resource Manager`.
+TIP: To select the `azure_credential`, click in the text field or on the drop down icon, then select `Microsoft Azure Resource Manager`.
 
 . **Save the job template.**
 +
-**Click** the blue **Save** button.
+**Click** the blue `Create job template` button.
 
 NOTE: The Ansible Playbooks for this lab are sourced from this link:https://github.com/ansible-cloud/azure_visibility[project on GitHub].
 
