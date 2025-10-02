@@ -190,6 +190,10 @@ Now, **launch** the `Retrieve virtual machines info` job template again. This ti
 Surveys allow you to abstract complexity by setting playbook variables with user-friendly questions.
 +
 TIP: Try using `os:windows` to retrieve only the Windows virtual machine, or `os:linux` to retrieve only the RHEL machine. This is extremely useful for managing hundreds of virtual machines.
++
+`os:linux`
++
+`os:windows`
 
 ---
 
