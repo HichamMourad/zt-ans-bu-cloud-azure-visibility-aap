@@ -21,7 +21,7 @@ First, log in to the automation controller with the following credentials.
 | Password | `ansible123!`
 |===
 
-=== Task 1: Create the "Create Report" Job Template
+=== Task 1: Create the "Create Azure Cloud Report" Job Template
 
 You will start by creating a job template that runs a playbook to generate the cloud report.
 
@@ -47,15 +47,37 @@ Fill out the form with the following information:
 | Project | `Cloud Visibility Project`
 | Playbook | `playbooks/cloud_report_azure.yml`
 | Execution Environment | `Microsoft Azure Execution Environment`
-| Credentials | `azure_credential` AND `SSH Controller Credential`
+| Credentials | `azure_credential` AND `RHEL on Azure`
 |===
 +
-TIP: To select the `azure_credential`, click in the text field or on the drop down icon, then select `Microsoft Azure Resource Manager`.
+TIP: To select the `azure_credential`, click in the text field or on the drop down icon, then select `azure_ credential | Microsoft Azure Resource Manager`.
+Same for the `RHEL on Azure` credential, click in the text field or on the drop down icon, then select `RHEL on Azure | Machine`.
 
 . **Save the job template.**
 +
 **Click** the blue `Create job template` button.
 
+. **Add the following survey question.**
++
+Navigate to the `Survey` tab and click the blue `Create survey question` button. Configure the following question as follows:
++
+[cols="1,1"]
+|===
+| Parameter | Value
+| Question | `Where should the report be generated?`
+| Answer variable name | `report_server`
+| Answer type | `Text`
+| Default answer | `RHEL-ansible`
+|===
++
+Click `Create survey question`.
+
+. **Enable the survey.**
++
+You must **enable the survey** by clicking the toggle switch at the top of the survey page. The text will change from `SURVEY Disabled` to `SURVEY enabled`.
++
+image:https://github.com/IPvSean/pictures_for_github/blob/master/survey_enabled.png?raw=true[Survey enabled toggle, 200, opts="border"]
++
 NOTE: The Ansible Playbooks for this lab are sourced from this link:https://github.com/ansible-cloud/azure_visibility[project on GitHub].
 
 === Task 2: Launch the Job Template
@@ -81,7 +103,7 @@ Once the job completes, **navigate** to the `Dynamic Report` tab at the top of y
 +
 You will see a report similar to this:
 +
-image::../assets/azure_report.png[Generated Azure cloud report, opts="border"]
+image::../assets/images/azure_report.png[Generated Azure cloud report, opts="border"]
 
 === Task 3: Analyze the Report
 
@@ -98,6 +120,8 @@ Important considerations for a cloud operator include:
 == Conclusion
 
 You have successfully completed this lab! We hope you enjoyed learning about how Ansible can be used to create dynamic documentation for your Azure environment.
++
+Press the `End` button to end the lab.
 
 == Troubleshooting
 
