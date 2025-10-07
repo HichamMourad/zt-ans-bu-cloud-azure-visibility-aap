@@ -103,7 +103,7 @@ Once the job completes, **navigate** to the bottom of the `Output` tab and locat
 +
 You will see a report similar to this:
 +
-image:../assets/images/azure_report.png[Generated Azure cloud report, opts="border"]
+image:../assets/images/azure_report.png?raw=true[Generated Azure cloud report, opts="border"]
 
 === Task 3: Analyze the Report
 
