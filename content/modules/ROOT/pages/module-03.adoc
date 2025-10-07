@@ -64,10 +64,10 @@ Navigate to the `Survey` tab and click the blue `Create survey question` button.
 [cols="1,1"]
 |===
 | Parameter | Value
-| Question | `Where should the report be generated?`
+| Question | `Where should the Azure Cloud report be generated?`
 | Answer variable name | `report_server`
 | Answer type | `Text`
-| Default answer | `RHEL-ansible`
+| Default answer | `reportserver`
 |===
 +
 Click `Create survey question`.
@@ -97,13 +97,13 @@ This playbook uses two roles:
 . The first role retrieves structured data for regions, virtual networks, and virtual machines.
 . The second role creates an HTML report. It installs a web server, copies assets (CSS, images), and uses the structured data to generate a dynamic website.
 
-. **View the generated report.**
+. **View the generated report.  Locate the Azure Cloud Report URL from the Job Output.**
 +
-Once the job completes, **navigate** to the `Dynamic Report` tab at the top of your lab window. You may need to refresh the page (⟳). `Click` on the gray boxes with the caret (`▸`) to expand the table rows with additional information.
+Once the job completes, **navigate** to the bottom of the `Output` tab and locate the URL.  It will look similar to this: `http://<IP_ADDRESS>:80`
 +
 You will see a report similar to this:
 +
-image::../assets/images/azure_report.png[Generated Azure cloud report, opts="border"]
+image:../assets/images/azure_report.png[Generated Azure cloud report, opts="border"]
 
 === Task 3: Analyze the Report
 
